@@ -26,7 +26,7 @@ public class HtmlTitleLinkListener extends LinkListener {
 		URLConnection c = null;
 		try {
 			c = url.openConnection();
-			if ( url.toString().contains("play.spotify.com") ) {
+			if ( url.toString().contains("play.spotify.com") || url.toString().contains("facebook.com") ) {
 				//TODO: this is a huge temporary hack to make spotify not suck. (should we just always use this as our user agent? user agent configurable?)
 				c.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0");
 			}
