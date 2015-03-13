@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Arrays;
 
 import javax.swing.text.html.HTMLDocument;
 
@@ -16,9 +17,15 @@ import com.skype.SkypeException;
 public class HtmlTitleLinkListener extends LinkListener {
 
 	Document doc;
+	private String[] uselessTitles;
 	
 	public HtmlTitleLinkListener() {
 		super(99); //set weight to 99 (last resort)
+		uselessTitles = new String[] {
+				"Facebook",
+				"Content Not Found"
+		}; //if something has this title then don't bother to report on it
+		
 	}
 	
 	protected ChatMessage doLink(ChatMessage msg, URL url) {
@@ -49,7 +56,7 @@ public class HtmlTitleLinkListener extends LinkListener {
 		HTMLDocument htmlDoc = getHtmlDocumentFromUrlConnection(c);
 		String title = (String) htmlDoc.getProperty(HTMLDocument.TitleProperty);
 		ChatMessage sentmsg = null;
-		if ( title != null && title.length() > 0 ) {
+		if ( title != null && title.length() > 0 && !(Arrays.asList(uselessTitles).contains(title)) ) {
 			try {
 				sentmsg = msg.getChat().send(title);
 			} catch (SkypeException e) {
