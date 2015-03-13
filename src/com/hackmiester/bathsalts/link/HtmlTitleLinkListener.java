@@ -23,7 +23,8 @@ public class HtmlTitleLinkListener extends LinkListener {
 		super(99); //set weight to 99 (last resort)
 		uselessTitles = new String[] {
 				"Facebook",
-				"Content Not Found"
+				"Content Not Found",
+				"Vocaroo | Voice message"
 		}; //if something has this title then don't bother to report on it
 		
 	}
