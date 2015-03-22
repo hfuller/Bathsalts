@@ -1,6 +1,7 @@
 package com.hackmiester.bathsalts;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -8,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
@@ -50,8 +52,18 @@ public abstract class Listener implements Comparable<Listener> {
 		return null;
 	}
 	public HTMLDocument getHtmlDocumentFromUrlConnection(URLConnection connection) {
-		try {
-			InputStream is = connection.getInputStream();
+//		try {
+			InputStream is;
+			try {
+				is = connection.getInputStream();
+			} catch (FileNotFoundException e1) {
+				lm.debug("Link returned 404: " + connection.getURL().toString() + " (" + e1.toString() + ")");
+				//TODO: this really should throw an exception
+				return null;
+			} catch (IOException e) {
+				lm.uncaughtException(Thread.currentThread(), e, connection);
+				return null;
+			}
 //			InputStreamReader isr = new InputStreamReader(is);
 //			BufferedReader br = new BufferedReader(isr);
 			HTMLEditorKit htmlKit = new HTMLEditorKit();
@@ -60,14 +72,20 @@ public abstract class Listener implements Comparable<Listener> {
 			//fixes charset exceptions
 			htmlDoc.putProperty("IgnoreCharsetDirective", new Boolean(true));
 			
-			htmlKit.read(is, htmlDoc, 0);
+			try {
+				htmlKit.read(is, htmlDoc, 0);
+			} catch (RuntimeException e) {
+				lm.debug("Exception reading " + connection.getURL().toString() + ": " + e.toString());
+			} catch (IOException e) {
+				lm.uncaughtException(Thread.currentThread(), e, connection);
+			} catch (BadLocationException e) {
+				lm.debug("Bad location: " + connection.getURL().toString() + " (" + e.toString() + ")");
+			}
 			return(htmlDoc);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			lm.uncaughtException(Thread.currentThread(), e, connection);
-			return null;
-		}
+//		} catch (Exception e) {
+//			lm.uncaughtException(Thread.currentThread(), e, connection);
+//			return null;
+//		}
 		
 		
 	}
