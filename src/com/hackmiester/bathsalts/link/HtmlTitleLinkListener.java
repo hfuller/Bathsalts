@@ -34,9 +34,15 @@ public class HtmlTitleLinkListener extends LinkListener {
 		URLConnection c = null;
 		try {
 			c = url.openConnection();
+			
+			//TODO: BIG UGLY HACK SECTION. need to have an extensible way to set certain headers for certain sites.
 			if ( url.toString().contains("play.spotify.com") || url.toString().contains("facebook.com") ) {
-				//TODO: this is a huge temporary hack to make spotify not suck. (should we just always use this as our user agent? user agent configurable?)
+				//cause these sites to not redirect us because we have a shitty/unknown browser
 				c.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0");
+			}
+			if ( url.toString().contains("fjcdn") ) {
+				//cause FunnyJunk to actually redirect us to the HTML page which has a title
+				c.setRequestProperty("Accept", "text/html");
 			}
 		} catch (IOException e1) {
 			lm.uncaughtException(Thread.currentThread(), e1, url);
