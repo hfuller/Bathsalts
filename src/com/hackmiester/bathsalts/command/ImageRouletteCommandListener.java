@@ -14,6 +14,7 @@ public class ImageRouletteCommandListener extends CommandListener {
 		help = "Gets a random image from Image Roulette\n"
 				+ "     Usage: !" + cmdList.get(0) + " <site>\n"
 				+ "     Supports puush, imgur, objection, youtube, reddit";
+		dontLoad=true; //TODO: rewrite image roulette
 	}
 
 	@Override

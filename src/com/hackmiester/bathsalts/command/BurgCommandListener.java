@@ -15,6 +15,7 @@ public class BurgCommandListener extends CommandListener {
 		super(new String[] {"burg","yeahmanforrealforrealtotes"});
 		help = "Yeah man forreal forreal totes\n"
 				+ "     Usage: !" + cmdList.get(0) + " <length>";
+		dontLoad = true; //TODO: rewrite burg
 	}
 
 	@Override

@@ -12,6 +12,7 @@ public class RudeCommandListener extends CommandListener {
 		help = "Makes Wikipedia more interesting\n"
 				+ "     (thanks http://orteil.dashnet.org/ ; NSFW)\n"
 				+ "     Usage: !" + cmdList.get(0) + " <Wikipedia article name>";
+		dontLoad=true; //TODO: reimplement rude?
 	}
 	
 	@Override
