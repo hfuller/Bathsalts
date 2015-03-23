@@ -27,6 +27,7 @@ public class MinecraftIrcService extends Service implements Observer {
 		super(new String[] {"mcirc","mcchat"} );
 		help = "Bridges this chat with the Harbingers Minecraft server chat";
 		disableHelp = true;
+		dontLoad = true; //TODO: there is no minecraft irc server.
 		
 		//clear the subscribed list
 		//subscribedChats = new ArrayList<Chat>();

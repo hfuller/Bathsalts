@@ -18,15 +18,18 @@ import com.skype.ChatMessage;
 public abstract class Listener implements Comparable<Listener> {
 
 	final int weight;
+	public boolean dontLoad;
 	public String help = null;
 	public boolean disableHelp = false; //TODO: make this configurable
 	protected ListenerManager lm = null;
 	
 	protected Listener() {
 		weight = 0;
+		dontLoad = false;
 	}
 	protected Listener(int w) {
 		weight = w;
+		dontLoad = false;
 	}
 	
 	public abstract ChatMessage processMessage(ChatMessage msg);

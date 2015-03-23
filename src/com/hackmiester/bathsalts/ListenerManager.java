@@ -151,6 +151,7 @@ public class ListenerManager implements UncaughtExceptionHandler {
 	}
 	
 	private void loadListeners(File file, ArrayList<Listener> listeners) {
+		//TODO: not semantic, should return the ArrayList
 		URL[] urls; File[] classfiles; ClassLoader cl;
 		
 		if ( file.isDirectory() ) {
@@ -166,11 +167,13 @@ public class ListenerManager implements UncaughtExceptionHandler {
 			    	String toLoad = f.toString().replace(".class","").replace('/', '.');
 			    	try {
 						Object temp = cl.loadClass(toLoad).newInstance();
-						((Listener) temp).setListenerManager(this);
-						listeners.add((Listener) temp);
-						//System.err.println("Loaded " + toLoad);
-						System.err.print(".");
-						System.out.println(temp);
+						if ( !((Listener) temp).dontLoad ) {
+							((Listener) temp).setListenerManager(this);
+							listeners.add((Listener) temp);
+							System.out.print(".");
+						} else {
+							System.out.print("!"); //we just throw it on the ground. I'm not a part of your system!
+						}
 					} catch (ClassNotFoundException e) {
 						System.err.println("Failed loading " + toLoad);
 					} catch (InstantiationException e) {
