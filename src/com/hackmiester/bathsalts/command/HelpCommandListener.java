@@ -2,6 +2,8 @@ package com.hackmiester.bathsalts.command;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang.time.DurationFormatUtils;
+
 import com.hackmiester.bathsalts.CommandListener;
 import com.hackmiester.bathsalts.Listener;
 import com.skype.ChatMessage;
@@ -9,9 +11,14 @@ import com.skype.SkypeException;
 
 public class HelpCommandListener extends CommandListener {
 
+	private long startTime;
+	
 	public HelpCommandListener() {
 		super(new String[]{"help"});
 		help = "Crashes the bot";
+		
+		startTime = System.currentTimeMillis();
+		
 	}
 	
 	@Override
@@ -35,9 +42,11 @@ public class HelpCommandListener extends CommandListener {
 						help = help + "\n";
 					}
 				}
+				long duration = System.currentTimeMillis() - startTime;
 				help = 	"This is a bot that reads link titles to your chat and also does some other stuff in response to the following commands:\n" + 
 						"\n" + help + "\n" +
-						"If the bot is working correctly, it was written by live:hfuller. If it isn't, I don't know who wrote it."
+						"The bot has been running for " + DurationFormatUtils.formatDurationWords(duration, true, true) + ".\n" +
+						"If the bot is working correctly, it was written by live:hfuller. If it isn't, I don't know who wrote it." 
 					;
 				m = msg.getChat().send(help);
 			} catch (SkypeException e) {
