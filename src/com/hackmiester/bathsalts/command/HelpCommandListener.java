@@ -35,8 +35,10 @@ public class HelpCommandListener extends CommandListener {
 						help = help + "\n";
 					}
 				}
-				help = help + "\n"
-						+ "If the bot is working correctly, it was written by live:hfuller. If it isn't, I don't know who wrote it.";
+				help = 	"This is a bot that reads link titles to your chat and also does some other stuff in response to the following commands:\n" + 
+						"\n" + help + "\n" +
+						"If the bot is working correctly, it was written by live:hfuller. If it isn't, I don't know who wrote it."
+					;
 				m = msg.getChat().send(help);
 			} catch (SkypeException e) {
 				e.printStackTrace();
