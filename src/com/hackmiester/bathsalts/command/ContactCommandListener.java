@@ -21,7 +21,7 @@ public class ContactCommandListener extends CommandListener {
 			ch = msg.getChat();
 			
 			lm.debug(msg.getSenderId() + " wants to contact the bot author!");
-			tosend = "Okay, great! I've passed along your contact information.";
+			tosend = "I've passed along your contact information to my creator.";
 			
 			m = ch.send(tosend);
 		} catch (SkypeException e) {
