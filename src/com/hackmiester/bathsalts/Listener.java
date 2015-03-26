@@ -43,7 +43,45 @@ public abstract class Listener implements Comparable<Listener> {
 	public void setListenerManager(ListenerManager listenerManager) {
 		lm = listenerManager;
 	}
+	
+	//TODO: everything after this line is shit.
+	//TODO: can we refactor this into a "Tools" class or somethign?
 
+	public String getHtmlTitleFromUrl(URL url) {
+		URLConnection c = null;
+		try {
+			c = url.openConnection();
+			
+			//TODO: BIG UGLY HACK SECTION. need to have an extensible way to set certain headers for certain sites.
+			if ( url.toString().contains("play.spotify.com") || url.toString().contains("facebook.com") ) {
+				//cause these sites to not redirect us because we have a shitty/unknown browser
+				c.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0");
+			}
+			if ( url.toString().contains("fjcdn") ) {
+				//cause FunnyJunk to actually redirect us to the HTML page which has a title
+				c.setRequestProperty("Accept", "text/html");
+			}
+		} catch (IOException e1) {
+			lm.uncaughtException(Thread.currentThread(), e1, url);
+		}
+		
+		String response = c.getHeaderFields().get(null).get(0);
+		if ( response.endsWith("301 Moved Permanently") || response.endsWith("301 Moved") || response.endsWith("302 Moved Temporarily") ) {
+			try {
+				System.out.println("Following redirect to " + c.getHeaderField("Location"));
+				return getHtmlTitleFromUrl(new URL(c.getHeaderField("Location")));
+			} catch (MalformedURLException e) {
+				lm.uncaughtException(Thread.currentThread(), e, c.getHeaderFields());
+			}
+		}			
+		
+		HTMLDocument htmlDoc = getHtmlDocumentFromUrlConnection(c);
+		String title = (String) htmlDoc.getProperty(HTMLDocument.TitleProperty);
+
+		return title;
+
+	}
+	
 	@Deprecated
 	public HTMLDocument getHtmlDocumentFromUrl(String s) {
 		lm.debug("DEPRECATED use of getHtmlDocumentFromUrl"); //TODO: is this still in use somewhere?
