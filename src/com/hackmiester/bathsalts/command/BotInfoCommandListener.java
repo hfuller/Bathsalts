@@ -1,5 +1,8 @@
 package com.hackmiester.bathsalts.command;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.apache.commons.lang.time.DurationFormatUtils;
 
 import com.hackmiester.bathsalts.CommandListener;
@@ -28,7 +31,19 @@ public class BotInfoCommandListener extends CommandListener {
 			
 			long duration = System.currentTimeMillis() - startTime;
 			
-			tosend =	"I have been running for " + DurationFormatUtils.formatDurationWords(duration, true, true) + ".";
+			tosend = "I have been running for " + DurationFormatUtils.formatDurationWords(duration, true, true) + ".\n";
+				try {
+					String master = "https://github.com/hfuller/Bathsalts/commit/master";
+					String change = getHtmlTitleFromUrl(new URL(master));
+					int pos = change.indexOf('·')-1; //github title separates change name with this char
+					if ( pos > 0 ) {
+						change = change.substring(0,pos);
+					}
+					tosend += "The last change made to me was: \"" + change + "\" - more details at " + master;
+				} catch (MalformedURLException e) {
+					//this can never happen, at least not when I have the 
+					System.err.println("My last change URL is misconfigured!!");
+				}
 			
 			m = ch.send(tosend);
 		} catch (SkypeException e) {
